@@ -15,24 +15,37 @@
   }
 
   function roseTmpl() {
-    var $rose = $('<section class="rose"></section>');
-    for (var i = 0, petals = 25; i < petals; i++) {
-      $rose.append('<div class="petal"></div>');
+    var rose = document.createElement('section');
+    rose.className = 'rose';
+    var petals = '';
+    for (var i = 0, petalsCount = 25; i < petalsCount; i++) {
+      petals += '<div class="petal"></div>';
     }
-    return $rose;
+    rose.innerHTML = petals;
+    return rose;
+  }
+
+  function setStyle(target, style) {
+    for (var key in style) {
+      if (style.hasOwnProperty(key)) {
+        var value = style[key];
+        target.style[key] = typeof value === 'number' && key !== 'opacity' ? value + 'px' : value;
+      }
+    }
   }
 
   var MAX_R = 25;
   var MAX_DELAY = 600;
   function randomRose(config) {
-    var $rose = roseTmpl();
-    $rose.css({
+    var rose = roseTmpl();
+    setStyle(rose, {
       width: config.diameter,
       height: config.diameter,
       top: config.top,
       left: config.left,
-    }).children().each(function(index, petal) {
-      var $petal = $(petal);
+    });
+    var children = Array.prototype.slice.call(rose.children);
+    children.forEach(function(petal, index) {
       var theta = randomAngle();
       var r = MAX_R - index;
       var x = r / 2.6 * Math.sin(theta) - r + '%';
@@ -40,7 +53,7 @@
       var diameter = 2 * r + '%';
       var delay = MAX_DELAY - index * 30;
       setTimeout(function() {
-        $petal.css({
+        setStyle(petal, {
           marginTop: y,
           marginLeft: x,
           width: diameter,
@@ -49,11 +62,11 @@
           backgroundColor: randomColor(r),
         });
         setTimeout(function() {
-          $petal.css({ opacity: 0 });
+          setStyle(petal, { opacity: 0 });
         }, config.life + MAX_DELAY - delay * 1.5);
       }, delay);
     });
-    return $rose;
+    return rose;
   }
 
   function randomDelay() {
@@ -64,20 +77,19 @@
   var winW = window.innerWidth;
   var MAX_DIAMETER = Math.min(winH, winW) / 2;
   var MIN_DIAMETER = Math.min(winH, winW) / 5;
+  var content = document.getElementById('content');
   function generateRose() {
-    var $rose = randomRose({
-      top: Math.random() * winH,
-      left: Math.random() * winW,
-      diameter: MIN_DIAMETER +
-        Math.random() * (MAX_DIAMETER - MIN_DIAMETER),
+    var diameter = MIN_DIAMETER + Math.random() * (MAX_DIAMETER - MIN_DIAMETER);
+    var rose = randomRose({
+      diameter: diameter,
+      top: Math.random() * (winH - diameter) + diameter / 2,
+      left: Math.random() * (winW - diameter) + diameter / 2,
       life: Math.random() * 25000 + 5000,
     });
 
-    $('#content').append($rose);
+    content.appendChild(rose);
     setTimeout(generateRose, randomDelay());
   }
 
-  $(function() {
-    setTimeout(generateRose, randomDelay());
-  });
+  setTimeout(generateRose, randomDelay());
 })();

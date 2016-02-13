@@ -1,0 +1,27 @@
+{
+  "name": "roses",
+  "version": "0.1.0",
+  "description": "A red rose is an unmistakable expression of love.",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^2.0.0",
+    "eslint-config-egg": "^1.0.3"
+  },
+  "scripts": {
+    "lint": "eslint ./index.js --global $"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/benjycui/roses.git"
+  },
+  "keywords": [
+    "rose",
+    "love"
+  ],
+  "author": "Benjy Cui",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benjycui/roses/issues"
+  },
+  "homepage": "https://github.com/benjycui/roses#readme"
+}
